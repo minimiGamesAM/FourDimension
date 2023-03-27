@@ -3,6 +3,7 @@
 
 #include "MG_Stove.h"
 #include "MG_GameplayInterface.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 AMG_Stove::AMG_Stove()
@@ -18,7 +19,7 @@ void AMG_Stove::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	StoveMeshComp = Cast<UStaticMeshComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass()));
+	FogonMeshComp = Cast<USphereComponent>(GetComponentByClass(USphereComponent::StaticClass()));
 }
 
 void AMG_Stove::StoveTouched(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -38,9 +39,9 @@ void AMG_Stove::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (StoveMeshComp)
+	if (FogonMeshComp)
 	{
-		StoveMeshComp->OnComponentBeginOverlap.AddDynamic(this, &AMG_Stove::StoveTouched);
+		FogonMeshComp->OnComponentBeginOverlap.AddDynamic(this, &AMG_Stove::StoveTouched);
 	}
 }
 

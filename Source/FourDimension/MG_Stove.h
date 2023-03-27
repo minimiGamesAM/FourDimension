@@ -7,7 +7,7 @@
 #include "MG_Stove.generated.h"
 
 //class UMG_InteractComponent;
-class UStaticMeshComponent;
+class USphereComponent;
 
 UCLASS()
 class FOURDIMENSION_API AMG_Stove : public AActor
@@ -21,7 +21,7 @@ public:
 protected:
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StoveMeshComp = nullptr;
+	USphereComponent* FogonMeshComp = nullptr;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
