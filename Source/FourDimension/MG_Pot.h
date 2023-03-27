@@ -22,6 +22,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Heat")
 	float HeatRate = 0.0f;
 
+	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* PotMeshComp = nullptr;
 
 	// Called when the game starts or when spawned

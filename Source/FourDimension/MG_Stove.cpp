@@ -19,11 +19,6 @@ void AMG_Stove::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	StoveMeshComp = Cast<UStaticMeshComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass()));
-
-	if (StoveMeshComp)
-	{
-		StoveMeshComp->OnComponentBeginOverlap.AddDynamic(this, &AMG_Stove::StoveTouched);
-	}
 }
 
 void AMG_Stove::StoveTouched(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -42,20 +37,17 @@ void AMG_Stove::StoveTouched(UPrimitiveComponent* OverlappedComponent, AActor* O
 void AMG_Stove::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (StoveMeshComp)
+	{
+		StoveMeshComp->OnComponentBeginOverlap.AddDynamic(this, &AMG_Stove::StoveTouched);
+	}
 }
 
 // Called every frame
 void AMG_Stove::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-}
-
-// Called to bind functionality to input
-void AMG_Stove::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
 
