@@ -6,6 +6,9 @@
 #include "GameFramework/Pawn.h"
 #include "Personaje.generated.h"
 
+class UMG_DragComponent;
+class UPhysicsHandleComponent;
+
 UCLASS()
 class FOURDIMENSION_API APersonaje : public APawn
 {
@@ -23,7 +26,14 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* CameraComp;
-	
+
+	UPROPERTY(EditAnywhere)
+	class UMG_DragComponent* DragComp;
+
+	UPROPERTY(EditAnywhere)
+	UPhysicsHandleComponent* PhyHandleComp;
+
+	virtual void PostInitializeComponents() override;
 public:
 
 	UFUNCTION(BlueprintCallable)
@@ -53,6 +63,12 @@ public:
 	void MoveRight(float Val);
 
 	void EjercerFuerza(float Val);
+
+	void PickObject();
+	void ReleaseObject();
+
+	UFUNCTION()
+	void SetPhysicsHandle(AActor* InstigatorActor, UPrimitiveComponent* CompToDrag, FVector Location);
 	
 private:
 	FVector PointOfAttraction;

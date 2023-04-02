@@ -4,6 +4,8 @@
 #include "Personaje.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "MG_DragComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values
 APersonaje::APersonaje()
@@ -11,6 +13,18 @@ APersonaje::APersonaje()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    DragComp = CreateDefaultSubobject<UMG_DragComponent>("DragComp");
+    PhyHandleComp = CreateDefaultSubobject<UPhysicsHandleComponent>("PhyHandleComp");
+}
+
+void APersonaje::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
+
+    if (DragComp)
+    {
+        DragComp->OnGrabObject.AddDynamic(this, &APersonaje::SetPhysicsHandle);
+    }
 }
 
 // Called when the game starts or when spawned
@@ -42,7 +56,17 @@ void APersonaje::BeginPlay()
 void APersonaje::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-            
+
+    if (DragComp && PhyHandleComp && DragComp->PossesObject)
+    {
+
+        APawn* MyPawn = Cast<APawn>(this);
+
+        //FVector Pos = MyPawn->GetTransform().TransformVector(DragComp->LocalPos);
+
+        //DrawDebugPoint(GetWorld(), Pos, 1, FColor::Green, false, 1.0);
+        PhyHandleComp->SetTargetLocation(DragComp->LocalPos + GetActorLocation());
+    }
 }
 
 // Called to bind functionality to input
@@ -58,7 +82,24 @@ void APersonaje::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
     PlayerInputComponent->BindAxis("Girar", this, &APersonaje::AddControllerYawInput);
     PlayerInputComponent->BindAxis("Mirar", this, &APersonaje::AddControllerPitchInput );
 
+    PlayerInputComponent->BindAction("Pick", IE_Pressed, this, &APersonaje::PickObject);
+
 }
+
+void APersonaje::SetPhysicsHandle(AActor* InstigatorActor, UPrimitiveComponent* CompToDrag, FVector Location)
+{
+    PhyHandleComp->GrabComponentAtLocation(CompToDrag, NAME_None, Location);
+}
+
+void APersonaje::PickObject()
+{
+    DragComp->BeginDrag();
+}
+
+void APersonaje::ReleaseObject()
+{
+}
+
 
 void APersonaje::EjercerFuerza(float Val)
 {
