@@ -59,12 +59,7 @@ void APersonaje::Tick(float DeltaTime)
 
     if (DragComp && PhyHandleComp && DragComp->PossesObject)
     {
-
-        APawn* MyPawn = Cast<APawn>(this);
-
-        //FVector Pos = MyPawn->GetTransform().TransformVector(DragComp->LocalPos);
-
-        //DrawDebugPoint(GetWorld(), Pos, 1, FColor::Green, false, 1.0);
+        FVector Pos = GetTransform().TransformPosition(DragComp->LocalPos);
         PhyHandleComp->SetTargetLocation(DragComp->LocalPos + GetActorLocation());
     }
 }
