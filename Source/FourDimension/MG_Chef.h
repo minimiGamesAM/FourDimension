@@ -19,16 +19,16 @@ class FOURDIMENSION_API AMG_Chef : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMG_Chef();
-
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere)
-		USpringArmComponent* SpringArmComp;
+	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
-		UCameraComponent* CameraComp;
+	UCameraComponent* CameraComp;
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
@@ -49,8 +49,5 @@ public:
 
 	void PickObject();
 	void ReleaseObject();
-
-	UFUNCTION()
-	void SetPhysicsHandle(AActor* InstigatorActor, UPrimitiveComponent* CompToDrag, FVector Location);
 
 };

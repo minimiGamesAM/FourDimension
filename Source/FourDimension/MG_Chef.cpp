@@ -27,18 +27,12 @@ AMG_Chef::AMG_Chef()
 
 	DragComp = CreateDefaultSubobject<UMG_DragComponent>("DragComp");
 	PhyHandleComp = CreateDefaultSubobject<UPhysicsHandleComponent>("PhyHandleComp");
-
-	if (DragComp)
-	{
-		DragComp->OnGrabObject.AddDynamic(this, &AMG_Chef::SetPhysicsHandle);
-	}
 }
 
 // Called when the game starts or when spawned
 void AMG_Chef::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AMG_Chef::MoveForward(float Value)
@@ -65,11 +59,6 @@ void AMG_Chef::MoveRight(float Value)
 	AddMovementInput(RightVector, Value);
 }
 
-void AMG_Chef::SetPhysicsHandle(AActor* InstigatorActor, UPrimitiveComponent* CompToDrag, FVector Location)
-{
-	PhyHandleComp->GrabComponentAtLocation(CompToDrag, NAME_None, Location);
-}
-
 void AMG_Chef::PickObject()
 {
 	DragComp->BeginDrag();
@@ -83,14 +72,6 @@ void AMG_Chef::ReleaseObject()
 void AMG_Chef::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (DragComp && PhyHandleComp && DragComp->PossesObject)
-	{
-		//FTransform Trans = FTransform(GetActorRotation(), GetActorLocation());
-		//FVector Pos = Trans.TransformPosition(DragComp->LocalPos);
-		FVector Pos = GetTransform().TransformPosition(DragComp->LocalPos);
-		PhyHandleComp->SetTargetLocation(Pos);
-	}
 }
 
 // Called to bind functionality to input
@@ -106,4 +87,3 @@ void AMG_Chef::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Pick", IE_Pressed, this, &AMG_Chef::PickObject);
 
 }
-

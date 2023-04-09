@@ -8,10 +8,16 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnGrabObject, AActor*, InstigatorActor, UPrimitiveComponent*, CompToDrag, FVector, Location);
 
+class UPhysicsHandleComponent;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FOURDIMENSION_API UMG_DragComponent : public UActorComponent
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "PhysicsComp")
+	static UPhysicsHandleComponent* GetPhysicsHandleComp(AActor* FromActor);
 
 public:	
 	// Sets default values for this component's properties

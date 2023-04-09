@@ -2,6 +2,8 @@
 
 
 #include "MG_DragComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+
 
 // Sets default values for this component's properties
 UMG_DragComponent::UMG_DragComponent()
@@ -13,12 +15,28 @@ UMG_DragComponent::UMG_DragComponent()
 	// ...
 }
 
+UPhysicsHandleComponent* UMG_DragComponent::GetPhysicsHandleComp(AActor* FromActor)
+{
+	if (FromActor)
+	{
+		return FromActor->FindComponentByClass<UPhysicsHandleComponent>();
+	}
+	return nullptr;
+}
+
 bool UMG_DragComponent::BeginDrag()
 {
+	AActor* MyOwner = GetOwner();
+
+	UPhysicsHandleComponent* PhysHandleComp = GetPhysicsHandleComp(MyOwner);
+
+	if (!PhysHandleComp)
+	{
+		return false;
+	}
+
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_PhysicsBody);
-
-	AActor* MyOwner = GetOwner();
 
 	FVector EyeLocation;
 	FRotator EyeRotation;
@@ -45,8 +63,13 @@ bool UMG_DragComponent::BeginDrag()
 	{
 		OnGrabObject.Broadcast(nullptr, Hit.GetComponent(), Hit.ImpactPoint);
 		LocalPos = MyOwner->GetTransform().InverseTransformPosition(Hit.ImpactPoint);
+		
+		PhysHandleComp->GrabComponentAtLocation(Hit.GetComponent(), NAME_None, Hit.ImpactPoint);
 		//FTransform Trans = FTransform(MyOwner->GetActorRotation(), MyOwner->GetActorLocation());
 		//LocalPos = Trans.InverseTransformPosition(Hit.ImpactPoint);
+
+		//AMG_Chef::GetPhysicsHandleComp()
+		
 	}
 
 	PossesObject = bBlocking;
@@ -74,6 +97,12 @@ void UMG_DragComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	UPhysicsHandleComponent* PhysHandleComp = GetPhysicsHandleComp(GetOwner());
+
+	if (PhysHandleComp)
+	{
+		FVector Pos = GetOwner()->GetTransform().TransformPosition(LocalPos);
+		PhysHandleComp->SetTargetLocation(Pos);
+	}
 }
 
