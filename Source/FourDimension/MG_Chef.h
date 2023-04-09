@@ -8,6 +8,8 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UMG_DragComponent;
+class UPhysicsHandleComponent;
 
 UCLASS()
 class FOURDIMENSION_API AMG_Chef : public ACharacter
@@ -31,11 +33,24 @@ protected:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
-public:	
+	UPROPERTY(EditAnywhere)
+	class UMG_DragComponent* DragComp;
+
+	UPROPERTY(EditAnywhere)
+	UPhysicsHandleComponent* PhyHandleComp;
+
+public:
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void PickObject();
+	void ReleaseObject();
+
+	UFUNCTION()
+	void SetPhysicsHandle(AActor* InstigatorActor, UPrimitiveComponent* CompToDrag, FVector Location);
 
 };

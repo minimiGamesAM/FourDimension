@@ -6,6 +6,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MG_DragComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values
 AMG_Chef::AMG_Chef()
@@ -23,6 +25,13 @@ AMG_Chef::AMG_Chef()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
+	DragComp = CreateDefaultSubobject<UMG_DragComponent>("DragComp");
+	PhyHandleComp = CreateDefaultSubobject<UPhysicsHandleComponent>("PhyHandleComp");
+
+	if (DragComp)
+	{
+		DragComp->OnGrabObject.AddDynamic(this, &AMG_Chef::SetPhysicsHandle);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -56,11 +65,32 @@ void AMG_Chef::MoveRight(float Value)
 	AddMovementInput(RightVector, Value);
 }
 
+void AMG_Chef::SetPhysicsHandle(AActor* InstigatorActor, UPrimitiveComponent* CompToDrag, FVector Location)
+{
+	PhyHandleComp->GrabComponentAtLocation(CompToDrag, NAME_None, Location);
+}
+
+void AMG_Chef::PickObject()
+{
+	DragComp->BeginDrag();
+}
+
+void AMG_Chef::ReleaseObject()
+{
+}
+
 // Called every frame
 void AMG_Chef::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (DragComp && PhyHandleComp && DragComp->PossesObject)
+	{
+		//FTransform Trans = FTransform(GetActorRotation(), GetActorLocation());
+		//FVector Pos = Trans.TransformPosition(DragComp->LocalPos);
+		FVector Pos = GetTransform().TransformPosition(DragComp->LocalPos);
+		PhyHandleComp->SetTargetLocation(Pos);
+	}
 }
 
 // Called to bind functionality to input
@@ -73,6 +103,7 @@ void AMG_Chef::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("Girar", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("Mirar", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAction("Pick", IE_Pressed, this, &AMG_Chef::PickObject);
 
 }
 

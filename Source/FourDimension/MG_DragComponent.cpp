@@ -45,6 +45,8 @@ bool UMG_DragComponent::BeginDrag()
 	{
 		OnGrabObject.Broadcast(nullptr, Hit.GetComponent(), Hit.ImpactPoint);
 		LocalPos = MyOwner->GetTransform().InverseTransformPosition(Hit.ImpactPoint);
+		//FTransform Trans = FTransform(MyOwner->GetActorRotation(), MyOwner->GetActorLocation());
+		//LocalPos = Trans.InverseTransformPosition(Hit.ImpactPoint);
 	}
 
 	PossesObject = bBlocking;
