@@ -62,14 +62,16 @@ bool UMG_DragComponent::BeginDrag()
 	if (bBlocking)
 	{
 		OnGrabObject.Broadcast(nullptr, Hit.GetComponent(), Hit.ImpactPoint);
+
+		LocalRot = MyOwner->GetTransform().InverseTransformRotation(Hit.GetActor()->GetActorRotation().Quaternion());
 		LocalPos = MyOwner->GetTransform().InverseTransformPosition(Hit.ImpactPoint);
 		
-		PhysHandleComp->GrabComponentAtLocation(Hit.GetComponent(), NAME_None, Hit.ImpactPoint);
-		//FTransform Trans = FTransform(MyOwner->GetActorRotation(), MyOwner->GetActorLocation());
-		//LocalPos = Trans.InverseTransformPosition(Hit.ImpactPoint);
-
-		//AMG_Chef::GetPhysicsHandleComp()
 		
+		PhysHandleComp->GrabComponentAtLocationWithRotation(Hit.GetComponent(),
+															NAME_None,
+															Hit.ImpactPoint,
+															Hit.GetActor()->GetActorRotation());
+
 	}
 
 	PossesObject = bBlocking;
@@ -102,7 +104,10 @@ void UMG_DragComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	if (PhysHandleComp)
 	{
 		FVector Pos = GetOwner()->GetTransform().TransformPosition(LocalPos);
+		FQuat4d Rot = GetOwner()->GetTransform().TransformRotation(LocalRot);
+
 		PhysHandleComp->SetTargetLocation(Pos);
+		PhysHandleComp->SetTargetRotation(Rot.Rotator());
 	}
 }
 

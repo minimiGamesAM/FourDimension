@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Math/Quat.h"
+
 #include "MG_DragComponent.generated.h"
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnGrabObject, AActor*, InstigatorActor, UPrimitiveComponent*, CompToDrag, FVector, Location);
 
@@ -32,6 +35,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	FVector LocalPos;
+
+	UPROPERTY(VisibleAnywhere)
+	FQuat4d LocalRot;
 
 	UPROPERTY(VisibleAnywhere)
 	bool PossesObject;
