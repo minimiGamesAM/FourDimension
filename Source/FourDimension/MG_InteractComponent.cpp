@@ -28,6 +28,11 @@ void UMG_InteractComponent::Interact()
 	//GetOwner()
 }
 
+void UMG_InteractComponent::EndInteract()
+{
+	
+}
+
 // Called every frame
 void UMG_InteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

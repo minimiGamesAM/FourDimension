@@ -17,6 +17,7 @@ public:
 	UMG_InteractComponent();
 
 	void Interact();
+	void EndInteract();
 
 protected:
 	// Called when the game starts

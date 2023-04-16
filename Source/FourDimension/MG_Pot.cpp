@@ -20,6 +20,11 @@ void AMG_Pot::Interact_Implementation(AActor* InstigatorPawn)
 	}
 }
 
+void AMG_Pot::EndInteract_Implementation(AActor* InstigatorPawn)
+{
+	
+}
+
 void AMG_Pot::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();

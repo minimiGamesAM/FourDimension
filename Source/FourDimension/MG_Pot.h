@@ -18,6 +18,8 @@ public:
 
 	void Interact_Implementation(AActor* InstigatorPawn);
 
+	void EndInteract_Implementation(AActor* InstigatorPawn);
+
 protected:
 	UPROPERTY(EditAnywhere, Category = "Heat")
 	float HeatRate = 0.0f;
