@@ -20,13 +20,7 @@ void AMG_TuboBasico::BeginPlay()
 
 	for (UStaticMeshComponent* Mesh : MeshCompones)
 	{
-		//Mesh->SetMassScale(NAME_None, MasaScale);
-
 		Cast<UPrimitiveComponent>(Mesh)->SetMassOverrideInKg(NAME_None, Masa, true);
-
-		//FBodyInstance* MeshBody = Mesh->GetBodyInstance();
-		//MeshBody->bOverrideMass = true;
-		//MeshBody->SetMassOverride(Masa, true);
 	}
 
 	for (UPhysicsConstraintComponent* ConstraintComp : ConstraintCompones)
@@ -38,8 +32,6 @@ void AMG_TuboBasico::BeginPlay()
 		ConstraintInstance.SetSoftSwingLimitParams(true, Stiffness, 1.0f, 0.0f, 1.0f);
 
 		ConstraintComp->ConstraintInstance = ConstraintInstance;
-
-		//ConstraintComp->ConstraintInstance.SetSoftTwistLimitParams(true, Stiffness, 1.0f, 0.0f, 1.0f);
 	}
 }
 
@@ -75,17 +67,17 @@ void AMG_TuboBasico::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	for (UStaticMeshComponent* Mesh : MeshCompones)
-	{
-		FString Mensaje = FString::Printf(TEXT("Masa : %f"), Mesh->GetMass());
-		GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Blue, Mensaje);
-	}
-
-	for (UPhysicsConstraintComponent* ConstraintComp : ConstraintCompones)
-	{
-		float StiffnessSuave = ConstraintComp->ConstraintInstance.GetSoftSwingLimitStiffness();
-		FString Mensaje = FString::Printf(TEXT("Stiffness : %f"), StiffnessSuave);
-		GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Red, Mensaje);
-	}
+	//for (UStaticMeshComponent* Mesh : MeshCompones)
+	//{
+	//	FString Mensaje = FString::Printf(TEXT("Masa : %f"), Mesh->GetMass());
+	//	GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Blue, Mensaje);
+	//}
+	//
+	//for (UPhysicsConstraintComponent* ConstraintComp : ConstraintCompones)
+	//{
+	//	float StiffnessSuave = ConstraintComp->ConstraintInstance.GetSoftSwingLimitStiffness();
+	//	FString Mensaje = FString::Printf(TEXT("Stiffness : %f"), StiffnessSuave);
+	//	GEngine->AddOnScreenDebugMessage(-1, 0.0f, FColor::Red, Mensaje);
+	//}
 }
 
